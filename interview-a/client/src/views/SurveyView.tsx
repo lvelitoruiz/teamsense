@@ -3,6 +3,8 @@ import Question from "src/components/Question";
 import Survey, { ISurvey } from "../entities/Survey";
 import SurveyResponse, { ISurveyResponse } from "../entities/SurveyResponse";
 import {Container, Button} from 'react-bootstrap';
+import { Link } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 
 interface SurveyProps {
     surveyId: number;
@@ -25,6 +27,7 @@ const SurveyView = (props: SurveyProps) => {
 
             if (!response.ok) {
                 console.error(`API failure: ${response.status}`, await response.json());
+                toast.error(`API failure: ${response.status}`)
             }
         };
 
@@ -32,6 +35,7 @@ const SurveyView = (props: SurveyProps) => {
         console.log("Saving...");
         saveSurvey();
         console.log("done.");
+        toast.success("Done!")
     }
     useEffect(() => {
         const loadSurvey = async (): Promise<void> => {
@@ -41,6 +45,7 @@ const SurveyView = (props: SurveyProps) => {
                 data = await response.json();
             } catch(error) {
                 console.error(error);
+                toast.error('' + error)
                 data = null;
             }
 
@@ -49,12 +54,14 @@ const SurveyView = (props: SurveyProps) => {
                 setSurveyResponse(new SurveyResponse(data.survey.id))
             } else {
                 console.error(`API failure: ${response.status}`, data);
+                toast.error(`API failure: ${response.status}`)
             }
         }
         // TODO: Loading state
         console.log("loading...");
         loadSurvey();
         console.log("done.");
+        toast.success("Done!")
     }, [props]);
 
     const onSurveySelection = (question: string, answer: string) => {
@@ -86,7 +93,7 @@ const SurveyView = (props: SurveyProps) => {
             <h1>Survey {props.surveyId}</h1>
             { qAndA }
             <Button
-                className="text-uppercase"
+                className="text-uppercase mb-4"
                 variant="success"
                 block={true}
                 onClick={event => {
@@ -95,6 +102,8 @@ const SurveyView = (props: SurveyProps) => {
             >
                 Respond!
             </Button>
+            <Link className="text-center d-block" to={'/ranking'}>Watch the Ranking of responses</Link>
+            <Toaster />
         </Container>
     )
 }

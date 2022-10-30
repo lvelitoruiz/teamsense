@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ISurvey } from "../entities/Survey";
 import { Form, Button } from "react-bootstrap";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 
@@ -28,6 +29,7 @@ const SurveyDropdown = () => {
                 data = await response.json();
             } catch(error) {
                 console.error(error);
+                toast.error('' + error);
                 data = null;
             }
             
@@ -35,6 +37,7 @@ const SurveyDropdown = () => {
                 setSurveyList(data.surveys)
             } else {
                 console.error(`API failure: ${response.status}`, data);
+                toast.error(`API failure: ${response.status}`)
             }
         }
         loadSurveys();
@@ -48,7 +51,7 @@ const SurveyDropdown = () => {
             Select a Survey:
           </Form.Label>
             <Form.Control as="select" onChange={onChange}>
-                {surveyList?.map(s => (<option value={s.id}>{s.name}</option>))}
+                {surveyList?.map(s => (<option key={s.id} value={s.id}>{s.name}</option>))}
             </Form.Control>
           <Button className="my-1" variant="secondary" type="submit" block={true}>Submit</Button>
         </Form>

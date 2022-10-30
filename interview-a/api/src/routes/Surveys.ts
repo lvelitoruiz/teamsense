@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import SurveyDao from '@daos/Survey/SurveyDao.mock';
 
 const surveyDao = new SurveyDao();
-const { NOT_FOUND, OK } = StatusCodes;
+const { NO_CONTENT, OK } = StatusCodes;
 
 /**
  * Get one survey, by ID.
@@ -21,7 +21,7 @@ const { NOT_FOUND, OK } = StatusCodes;
         return res.status(OK)
                   .json({surveys});
     } else {
-        return res.status(NOT_FOUND).end();
+        return res.status(NO_CONTENT).end();
     }
 }
 
@@ -43,7 +43,7 @@ export async function getSurvey(req: Request, res: Response) {
         return res.status(OK)
                   .json({survey});
     } else {
-        return res.status(NOT_FOUND).end();
+        return res.status(NO_CONTENT).end();
     }
 }
 
